@@ -11,8 +11,11 @@ using ZedGraph;
 
 namespace NM115
 {
+
     public partial class Form1 : Form
     {
+        FelbergMethod FM = new FelbergMethod();
+        public Functions.CircuitCurrentSetting fCCS = new Functions.CircuitCurrentSetting();
 
         GraphPane graphPane;
 
@@ -21,30 +24,39 @@ namespace NM115
             InitializeComponent();
 
             graphPane = zedGraphControl1.GraphPane;
-            DrawSineCurve();
         }
 
-        private void DrawSineCurve()
+        private void Draw()
         {
             PointPairList _pointPairList = new PointPairList();
+            fCCS.L = 0.5;
+            fCCS.R = 1;
+            fCCS.V = 0;
 
-            for (int _angle = 0; _angle <= 360; _angle += 10)
+            FM.x = 0;
+            FM.v = -1;
+            FM.h = 0.001;
+            FM.eps = 0.0001;
+
+            for (int i = 0;i < 40; i++)
             {
-                double _x = _angle;
-                double _y = Math.Log(Math.PI * _x / 180.0);
+                FM.StepOptimization(fCCS);
+                FM.Step();
+                double _x = FM.x;
+                double _y = FM.v;
                 PointPair _pointPair = new PointPair(_x, _y);
 
                 _pointPairList.Add(_pointPair);
             }
-
-            LineItem _lineItem = graphPane.AddCurve("Sine Curve", _pointPairList, Color.Purple, SymbolType.None);
+            LineItem _lineItem = graphPane.AddCurve("", _pointPairList, Color.Red, SymbolType.None);
 
             zedGraphControl1.AxisChange();
+            zedGraphControl1.Invalidate();
         }
 
-        private void zedGraphControl1_Load(object sender, EventArgs e)
+        private void button1_Click(object sender, EventArgs e)
         {
-
+            Draw();
         }
     }
 }
