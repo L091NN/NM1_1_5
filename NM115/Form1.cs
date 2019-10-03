@@ -30,15 +30,15 @@ namespace NM115
         {
             PointPairList _pointPairList = new PointPairList();
             fCCS.L = 0.5;
-            fCCS.R = 1;
-            fCCS.V = 0;
+            fCCS.R = 2;
+            fCCS.V = 1;
 
             FM.x = 0;
             FM.v = -1;
-            FM.h = 0.001;
-            FM.eps = 0.0001;
+            FM.h = 0.0001;
+            FM.eps = 0.005;
 
-            for (int i = 0;i < 40; i++)
+            for (int i = 0;i < 700; i++)
             {
                 FM.StepOptimization(fCCS);
                 FM.Step();

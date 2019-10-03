@@ -15,7 +15,7 @@ namespace NM115
             public double L { set; get; }
             public double R { set; get; }
 
-            public CircuitCurrentSetting(double _L = 1, double _R = 1, double _V = 0)
+            public CircuitCurrentSetting(double _L = 1.0, double _R = 1.0, double _V = 0.0)
             {
                 L = _L;
                 R = _R;
