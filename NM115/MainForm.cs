@@ -23,8 +23,7 @@ namespace NM115
 		{
             InitializeComponent();
 
-			XoTextBox.Text = "0";
-			IoTextBox.Text = "0.314";
+            graphPane = zedGraphControl1.GraphPane;
 		}
 
 
@@ -36,7 +35,7 @@ namespace NM115
 			{
 				if (!char.IsDigit(str[i]))
 				{
-					if (str[i] == '.' && i > 0 && !isFloating)
+					if (str[i] == '.' && i > 0 && !isFloating && str[i] != '-')
 					{
 						isFloating = true;
 						continue;
@@ -48,17 +47,38 @@ namespace NM115
 			return str.Length == 0 ? 0.0 : double.Parse(str);
 		}
 
-
-
-
-		private void XoTextBox_TextChanged(object sender, EventArgs e)
-		{
-			double number = ExtractNumber(((TextBox)sender).Text);
-		}
-
-        private void label3_Click(object sender, EventArgs e)
+        private void CalculateButton_Click(object sender, EventArgs e)
         {
+            fCCS.L = double.Parse(LtextBox.Text);
+            fCCS.R = double.Parse(RtextBox.Text);
+            fCCS.V = double.Parse(VtextBox.Text);
+            
+            FM.x = double.Parse(XoTextBox.Text);
+            FM.v = double.Parse(IoTextBox.Text);
+            FM.h = double.Parse(HtextBox.Text);
+            FM.eps = double.Parse(EtextBox.Text);
 
+            graphPane.CurveList.Clear();
+
+
+            PointPairList list = new PointPairList();
+
+            for(int i = 0; i < 700; ++i)
+            {
+                FM.StepOptimization(fCCS);
+                FM.Step();
+                double _x = FM.x;
+                double _y = FM.v;
+
+                PointPair pp = new PointPair(_x, _y);
+
+                list.Add(pp);
+            }
+
+            LineItem lineItem = graphPane.AddCurve("", list, Color.Red, SymbolType.None);
+
+            zedGraphControl1.AxisChange();
+            zedGraphControl1.Invalidate();
         }
     }
 }
