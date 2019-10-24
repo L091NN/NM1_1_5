@@ -49,6 +49,7 @@ namespace NM115
 
         private void CalculateButton_Click(object sender, EventArgs e)
         {
+            stepTable.Rows.Clear();
             fCCS.L = double.Parse(LtextBox.Text);
             fCCS.R = double.Parse(RtextBox.Text);
             fCCS.V = double.Parse(VtextBox.Text);
@@ -65,6 +66,9 @@ namespace NM115
 
             for(int i = 0; i < 700; ++i)
             {
+                stepTable.Rows.Add();
+                stepTable.Rows[i].SetValues(i, FM.h, FM.x, FM.v, FM.S, 
+                FM.k[0], FM.k[1], FM.k[2], FM.k[3], FM.k[4], FM.k[5]);
                 FM.StepOptimization(fCCS);
                 FM.Step();
                 double _x = FM.x;

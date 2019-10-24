@@ -12,6 +12,7 @@ namespace NM115
         public double v { set; get; }
         public double h { set; get; }
         public double eps { set; get; }
+        public double S { set; get; }
 
         public double[] k = new double[6];
 
@@ -48,14 +49,16 @@ namespace NM115
             vCur = v + ((-8.0 / 27.0) * k[0] + 2.0 * k[1] - (3544.0 / 2565.0) * k[2] + (1859.0 / 4104.0) * k[3] - (11.0 / 40.0) * k[4]) * h;
             k[5] = fCCS.Function(xCur, vCur);
 
-            double S = h * ((1.0 / 360.0) * k[0] - (128.0 / 4275.0) * k[2] + (127.0 / 6840.0) * k[3] + (1.0 / 50.0) * k[4] + (2.0 / 55.0) * k[5]);
+            double s = h * ((1.0 / 360.0) * k[0] - (128.0 / 4275.0) * k[2] + (127.0 / 6840.0) * k[3] + (1.0 / 50.0) * k[4] + (2.0 / 55.0) * k[5]);
 
-            if (Math.Abs(S) > eps)
+            S = Math.Abs(s);
+
+            if (S > eps)
             {
                 h /= 2.0;
                 StepOptimization(fCCS);
             }
-            else if (Math.Abs(S) < eps / 64.0)
+            else if (S < eps / 64.0)
             {
                 h *= 2.0;
                 StepOptimization(fCCS);
